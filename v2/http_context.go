@@ -6,24 +6,27 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type vortexContext struct {
-	ctx          context.Context // 请求的上下文
-	echo.Context                 // echo的上下文
+type Context struct {
+	echo.Context // echo的上下文
 }
 
 // GetContext 获取底层的context.Context
-func (vc *vortexContext) GetContext() context.Context {
+func (vc *Context) GetContext() context.Context {
 	return vc.Request().Context()
 }
 
-// WithValue 在context中设置键值对
-func (vc *vortexContext) WithValue(key, value interface{}) {
-	vc.ctx = context.WithValue(vc.ctx, key, value)
+// Value 从context中获取值
+func (vc *Context) Value(key interface{}) interface{} {
+	return vc.Request().Context().Value(key)
 }
 
-// Value 从context中获取值
-func (vc *vortexContext) Value(key interface{}) interface{} {
-	return vc.ctx.Value(key)
+// 从请求中获取到session信息
+func (vc *Context) GetSessionPayload() *Session {
+	session := vc.Get(HttpHeaderEnum.Session.XString())
+	if session == nil {
+		return nil
+	}
+	return session.(*Session)
 }
 
 type Status struct {

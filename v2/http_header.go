@@ -15,9 +15,13 @@ var HttpHeaderEnum = struct {
 	ContentLength  HttpHeader // 内容长度
 	AcceptLanguage HttpHeader // 接收语言
 	Authorization  HttpHeader // 授权
+
+	Session HttpHeader // 自定义的claims
 }{
 	ContentType:    "Content-Type",
 	ContentLength:  "Content-Length",
 	AcceptLanguage: "Accept-Language",
 	Authorization:  "Authorization",
+
+	Session: "Session",
 }

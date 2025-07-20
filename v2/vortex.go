@@ -2,6 +2,7 @@ package vortex
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/dzjyyds666/Allspark-go/conv"
@@ -17,7 +18,11 @@ var reqType = struct {
 	WebSocket: "websocket",
 }
 
-var emMap map[string]string
+var (
+	emMap            = make(map[string]string)
+	consoleSecretKey = "" // 控制台的密钥
+	sercetKey        = "" // 服务的密钥
+)
 
 type Vortex struct {
 	ctx           context.Context
@@ -35,8 +40,9 @@ func BootStrap(ctx context.Context, options ...Option) *Vortex {
 	e.HideBanner = true
 
 	v := &Vortex{
-		ctx: ctx,
-		e:   e,
+		ctx:     ctx,
+		e:       e,
+		routers: []*VortexHttpRouter{},
 	}
 
 	for _, opt := range options {
@@ -78,8 +84,7 @@ func WithRouters(routers []*VortexHttpRouter) Option {
 	return func(v *Vortex) *Vortex {
 		for _, router := range routers {
 			echoHandler := func(c echo.Context) error {
-				return router.handle(vortexContext{
-					ctx:     c.Request().Context(),
+				return router.handle(&Context{
 					Context: c,
 				})
 			}
@@ -90,14 +95,19 @@ func WithRouters(routers []*VortexHttpRouter) Option {
 			}
 			v.e.Match(router.methods, router.path, echoHandler, echoMws...)
 		}
-		v.routers = routers
+		v.routers = append(v.routers, routers...)
 		return v
 	}
 }
 
+// 设置i18n配置
 func WithI18n(i18n string) Option {
 	return func(v *Vortex) *Vortex {
-
+		// 输入的i18n json字符串反序列化到emMap
+		err := json.Unmarshal([]byte(i18n), &emMap)
+		if nil != err {
+			panic(err)
+		}
 		return v
 	}
 }

@@ -4,18 +4,17 @@ import (
 	"time"
 
 	"github.com/dzjyyds666/Allspark-go/protocol"
-	"github.com/dzjyyds666/vortex/v2/middleware"
 	"github.com/labstack/echo/v4"
 )
 
-type VortexHttpHandle func(ctx vortexContext) error
+type VortexHttpHandle func(ctx *Context) error
 
 type VortexHttpRouter struct {
 	path        string
 	methods     []string // 请求方法
 	apiDesc     string   // 路由的描述信息
 	handle      VortexHttpHandle
-	middlewares []middleware.VortexHttpMiddleware // 路由中间件
+	middlewares []VortexHttpMiddleware // 路由中间件
 }
 
 func (vh *VortexHttpRouter) WithApiDesc(desc string) *VortexHttpRouter {
@@ -23,7 +22,8 @@ func (vh *VortexHttpRouter) WithApiDesc(desc string) *VortexHttpRouter {
 	return vh
 }
 
-func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...middleware.VortexHttpMiddleware) *VortexHttpRouter {
+func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...VortexHttpMiddleware) *VortexHttpRouter {
+	middlwares = append(middlwares, logReqAndResp(), VerifyJwt())
 	return &VortexHttpRouter{
 		methods:     methods,
 		path:        path,
