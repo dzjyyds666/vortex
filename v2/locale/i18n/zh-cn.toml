@@ -1,0 +1,5 @@
+code_for_success = "请求成功"
+code_for_params_invaild = "参数错误"
+code_for_permission_deny = "权限不足"
+code_for_internal_error = "系统内部故障"
+code_for_unauthorized = "未授权或token无效"
