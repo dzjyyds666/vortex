@@ -28,7 +28,7 @@ type Vortex struct {
 	ctx           context.Context
 	e             *echo.Echo          // echo 实例
 	port          string              // 服务的端口号
-	routers       []*vortexHttpRouter // http路由
+	routers       []*VortexHttpRouter // http路由
 	hiddleBanner  bool                // 是否隐藏banner
 	hiddleRouters bool                // 是否打印路由信息
 
@@ -81,7 +81,7 @@ func WithPort(port string) Option {
 }
 
 // 设置http的路由
-func WithRouters(routers []*vortexHttpRouter) Option {
+func WithRouters(routers []*VortexHttpRouter) Option {
 	return func(v *Vortex) *Vortex {
 		for _, router := range routers {
 			echoHandler := func(c echo.Context) error {

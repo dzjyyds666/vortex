@@ -13,7 +13,7 @@ import (
 
 type VortexHttpHandle func(ctx *Context) error
 
-type vortexHttpRouter struct {
+type VortexHttpRouter struct {
 	path        string
 	methods     []string // 请求方法
 	apiDesc     string   // 路由的描述信息
@@ -21,14 +21,14 @@ type vortexHttpRouter struct {
 	middlewares []VortexHttpMiddleware // 路由中间件
 }
 
-func (vh *vortexHttpRouter) WithApiDesc(desc string) *vortexHttpRouter {
+func (vh *VortexHttpRouter) WithApiDesc(desc string) *VortexHttpRouter {
 	vh.apiDesc = desc
 	return vh
 }
 
-func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...VortexHttpMiddleware) *vortexHttpRouter {
+func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...VortexHttpMiddleware) *VortexHttpRouter {
 	middlwares = append(middlwares, logReqAndResp(), VerifyJwt())
-	return &vortexHttpRouter{
+	return &VortexHttpRouter{
 		methods:     methods,
 		path:        path,
 		handle:      handle,
@@ -73,8 +73,8 @@ func HttpStreamResponse(ctx echo.Context, contentType string, r io.Reader) error
 }
 
 // 预制路由
-func prepareRouters(v *Vortex) []*vortexHttpRouter {
-	return []*vortexHttpRouter{
+func prepareRouters(v *Vortex) []*VortexHttpRouter {
+	return []*VortexHttpRouter{
 		AppendHttpRouter(
 			[]string{http.MethodPost, http.MethodGet},
 			"/v1/ws",
