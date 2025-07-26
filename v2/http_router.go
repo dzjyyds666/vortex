@@ -2,6 +2,7 @@ package vortex
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"time"
 
@@ -56,6 +57,19 @@ func HttpJsonResponse(c echo.Context, status Status, data interface{}) error {
 	}
 
 	return c.JSON(int(resp.Head.Ec), resp)
+}
+
+func HttpStreamResponse(ctx echo.Context, contentType string, r io.Reader) error {
+	if len(contentType) == 0 {
+		contentType = "application/octet-stream"
+	}
+	err := ctx.Stream(http.StatusOK, contentType, r)
+	if nil != err {
+		return err
+	}
+
+	ctx.Response().Flush()
+	return nil
 }
 
 // 预制路由

@@ -2,6 +2,7 @@ package vortex
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/dzjyyds666/vortex/v2/locale"
 	"github.com/labstack/echo/v4"
@@ -62,3 +63,5 @@ var Statuses = struct {
 	UnAuthorized:   Status{RespCode: 401, I18nKey: locale.K.CODE_FOR_UNAUTHORIZED},
 	InternalError:  Status{RespCode: 500, I18nKey: locale.K.CODE_FOR_INTERNAL_ERROR},
 }
+
+type HttpHeaderOption func(header http.Header)
