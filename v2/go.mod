@@ -4,13 +4,15 @@ go 1.23.3
 
 require (
 	github.com/dzjyyds666/Allspark-go v0.0.0-20250720145437-5d1e16c1c417
+	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/labstack/echo/v4 v4.13.4
 )
 
-replace github.com/dzjyyds666/Allspark-go => /Users/aaron/code/GolandProjects/Allspark-go
+replace github.com/dzjyyds666/Allspark-go => ../../Allspark-go
+
+// replace github.com/dzjyyds666/Allspark-go => /Users/aaron/code/GolandProjects/Allspark-go
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.3 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

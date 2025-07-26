@@ -53,7 +53,7 @@ func BootStrap(ctx context.Context, options ...Option) *Vortex {
 }
 
 // Start 启动服务器
-func (v *Vortex) Start(address string) {
+func (v *Vortex) Start() {
 	if !v.hiddleRouters {
 		// 打印路由信息
 		v.printRouters()
@@ -63,7 +63,7 @@ func (v *Vortex) Start(address string) {
 		v.showBanner()
 	}
 
-	err := v.e.Start(address)
+	err := v.e.Start(":" + v.port)
 	if nil != err {
 		panic(err)
 	}
