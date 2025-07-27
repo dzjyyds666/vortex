@@ -41,9 +41,11 @@ func HttpJsonResponse(c echo.Context, status Status, data interface{}) error {
 	// 获取当前请求想要返回的语言类型
 	lang := c.Request().Header.Get(HttpHeaderEnum.AcceptLanguage.String())
 	em := getEmByLang(lang, status.I18nKey)
+
 	//构造数据
 	resp := &protocol.VortexPb{
 		Body: data,
+		URI:  c.Request().RequestURI,
 		Head: protocol.Head{
 			Ec:        status.RespCode,
 			Em:        em,
