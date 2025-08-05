@@ -31,6 +31,14 @@ func (s *Session) Bind(claims jwt.MapClaims) *Session {
 
 type VortexHttpMiddleware echo.MiddlewareFunc
 
+// min returns the smaller of two integers
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 // 打印请求和响应的日志
 func logReqAndResp() VortexHttpMiddleware {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -54,10 +62,16 @@ func VerifyJwt() VortexHttpMiddleware {
 		return func(c echo.Context) error {
 			token := c.Request().Header.Get(HttpHeaderEnum.Authorization.String())
 			if len(token) > 0 {
+				// 处理Bearer前缀
+				if len(token) > 7 && token[:7] == "Bearer " {
+					token = token[7:] // 移除"Bearer "前缀
+				}
 				claims, err := jwtx.ParseToken(sercetKey, token)
 				if nil != err {
-					logx.Errorf("vortex|VerifyMw|VerifyJwt ParseToken err:%v", err)
-					return err
+					logx.Errorf("vortex|VerifyMw|VerifyJwt ParseToken err:%v, token length: %d", err, len(token))
+					return HttpJsonResponse(c, Statuses.UnAuthorized, echo.Map{
+						"msg": "token invalid",
+					})
 				}
 				session := new(Session).Bind(claims)
 				// 还是交给业务侧判断是否根据过期时间拒绝该次请求
