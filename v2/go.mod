@@ -3,7 +3,7 @@ module github.com/dzjyyds666/vortex/v2
 go 1.23.3
 
 require (
-	github.com/dzjyyds666/Allspark-go v0.0.0-20250720145437-5d1e16c1c417
+	github.com/dzjyyds666/Allspark-go v0.0.0-20250805150453-48f9acec8323
 	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/labstack/echo/v4 v4.13.4
 )
