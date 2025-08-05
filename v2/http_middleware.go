@@ -63,6 +63,7 @@ func VerifyJwt() VortexHttpMiddleware {
 			token := c.Request().Header.Get(HttpHeaderEnum.Authorization.String())
 			if len(token) > 0 {
 				// 处理Bearer前缀
+				logx.Infof("vortex|VerifyMw|VerifyJwt token: %s", token)
 				if len(token) > 7 && token[:7] == "Bearer " {
 					token = token[7:] // 移除"Bearer "前缀
 				}
