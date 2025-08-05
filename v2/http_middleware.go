@@ -69,10 +69,15 @@ func VerifyJwt() VortexHttpMiddleware {
 				}
 				claims, err := jwtx.ParseToken(sercetKey, token)
 				if nil != err {
-					logx.Errorf("vortex|VerifyMw|VerifyJwt ParseToken err:%v, token length: %d", err, len(token))
-					return HttpJsonResponse(c, Statuses.UnAuthorized, echo.Map{
-						"msg": "token invalid",
-					})
+					logx.Errorf("vortex|VerifyMw|SecretKey|VerifyJwt ParseToken err:%v", err)
+					// 使用console的key试试
+					claims, err = jwtx.ParseToken(consoleSecretKey, token)
+					if nil != err {
+						logx.Errorf("vortex|VerifyMw|ConsoleSecretKey|VerifyJwt ParseToken err:%v", err)
+						return HttpJsonResponse(c, Statuses.UnAuthorized, echo.Map{
+							"msg": "token invalid",
+						})
+					}
 				}
 				session := new(Session).Bind(claims)
 				// 还是交给业务侧判断是否根据过期时间拒绝该次请求
