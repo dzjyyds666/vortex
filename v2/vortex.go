@@ -149,6 +149,20 @@ func (v *Vortex) showBanner() {
 `, v.port))
 }
 
+func WithJwtSecretKey(key string) Option {
+	return func(v *Vortex) *Vortex {
+		sercetKey = key
+		return v
+	}
+}
+
+func WithConsoleSecretKey(key string) Option {
+	return func(v *Vortex) *Vortex {
+		consoleSecretKey = key
+		return v
+	}
+}
+
 // 根据语言类型获取对应Em
 func getEmByLang(i18nkey, lang string) string {
 
