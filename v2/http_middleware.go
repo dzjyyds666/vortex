@@ -23,9 +23,15 @@ func (s *Session) AsJwtClaims() jwt.MapClaims {
 }
 
 func (s *Session) Bind(claims jwt.MapClaims) *Session {
-	s.Uid = claims["uid"].(string)
-	s.Sid = claims["sid"].(string)
-	s.Expire = int64(claims["expire"].(float64))
+	if uid := claims["uid"]; uid != nil {
+		s.Uid = uid.(string)
+	}
+	if sid := claims["sid"]; sid != nil {
+		s.Sid = sid.(string)
+	}
+	if expire := claims["expire"]; expire != nil {
+		s.Expire = int64(expire.(float64))
+	}
 	return s
 }
 
