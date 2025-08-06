@@ -148,7 +148,7 @@ func WithVersion(version string) Option {
 // 打印出路由的详细信息
 func (v *Vortex) printRouters() {
 	for _, router := range v.routers {
-		logx.Infof("methods=>[%s]\tapi=>[%s]\tpath=>[%s]\tdesc=>[%s]", conv.ToJsonWithoutError(router.methods), router.apiDesc, router.path, router.apiDesc)
+		logx.Infof("methods=>[%s] | api=>[%s] | path=>[%s] | desc=>[%s]", conv.ToJsonWithoutError(router.methods), router.apiDesc, router.path, router.apiDesc)
 	}
 }
 
