@@ -58,7 +58,7 @@ func HttpJsonResponse(c echo.Context, status Status, data interface{}) error {
 		resp.Head.Ec = status.subCode
 	}
 
-	return c.JSON(int(resp.Head.Ec), resp)
+	return c.JSON(int(status.RespCode), resp)
 }
 
 func HttpStreamResponse(ctx echo.Context, contentType string, r io.Reader) error {
