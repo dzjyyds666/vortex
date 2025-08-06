@@ -7,6 +7,7 @@ import (
 
 	"github.com/dzjyyds666/Allspark-go/conv"
 	"github.com/dzjyyds666/Allspark-go/logx"
+	"github.com/dzjyyds666/vortex/v2/locale"
 	"github.com/labstack/echo/v4"
 )
 
@@ -45,7 +46,8 @@ func BootStrap(ctx context.Context, options ...Option) *Vortex {
 	}
 
 	v.routers = prepareRouters(v)
-
+	// 设置默认的18n
+	WithI18n(locale.V)
 	for _, opt := range options {
 		opt(v)
 	}
@@ -105,10 +107,15 @@ func WithRouters(routers []*VortexHttpRouter) Option {
 func WithI18n(i18n string) Option {
 	return func(v *Vortex) *Vortex {
 		// 输入的i18n json字符串反序列化到emMap
-		err := json.Unmarshal([]byte(i18n), &emMap)
+		tmp := make(map[string]string)
+		err := json.Unmarshal([]byte(i18n), &tmp)
 		if nil != err {
 			panic(err)
 		}
+		for k, v := range emMap {
+			tmp[k] = v
+		}
+		emMap = tmp
 		return v
 	}
 }
