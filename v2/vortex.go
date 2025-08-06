@@ -137,6 +137,14 @@ func WithHiddleRouters() Option {
 	}
 }
 
+// 设置版本
+func WithVersion(version string) Option {
+	return func(v *Vortex) *Vortex {
+		routerVersion = "/" + version
+		return v
+	}
+}
+
 // 打印出路由的详细信息
 func (v *Vortex) printRouters() {
 	for _, router := range v.routers {

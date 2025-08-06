@@ -11,6 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+var routerVersion = "/v1"
+
 type VortexHttpHandle func(ctx *Context) error
 
 type VortexHttpRouter struct {
@@ -27,7 +29,7 @@ func (vh *VortexHttpRouter) WithApiDesc(desc string) *VortexHttpRouter {
 }
 
 func pathWithVersion(path string) string {
-	return "/v1" + path
+	return routerVersion + path
 }
 
 func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...VortexHttpMiddleware) *VortexHttpRouter {
