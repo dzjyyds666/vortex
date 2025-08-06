@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/dzjyyds666/Allspark-go/conv"
 	"github.com/dzjyyds666/Allspark-go/logx"
 	"github.com/dzjyyds666/Allspark-go/protocol"
 	"github.com/labstack/echo/v4"
@@ -27,11 +26,15 @@ func (vh *VortexHttpRouter) WithApiDesc(desc string) *VortexHttpRouter {
 	return vh
 }
 
+func pathWithVersion(path string) string {
+	return "/v1" + path
+}
+
 func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, desc string, middlwares ...VortexHttpMiddleware) *VortexHttpRouter {
 	middlwares = append(middlwares, logReqAndResp(), VerifyJwt())
 	return &VortexHttpRouter{
 		methods:     methods,
-		path:        path,
+		path:        pathWithVersion(path),
 		handle:      handle,
 		middlewares: middlwares,
 		apiDesc:     desc,
@@ -42,9 +45,6 @@ func HttpJsonResponse(c echo.Context, status Status, data interface{}) error {
 	// 获取当前请求想要返回的语言类型
 	lang := c.Request().Header.Get(HttpHeaderEnum.AcceptLanguage.String())
 	em := getEmByLang(status.I18nKey, lang)
-
-	logx.Infof("HttpJsonResponse|status:%s", conv.ToJsonWithoutError(status))
-
 	//构造数据
 	resp := &protocol.VortexPb{
 		Body: data,
@@ -82,19 +82,19 @@ func prepareRouters(v *Vortex) []*VortexHttpRouter {
 	return []*VortexHttpRouter{
 		AppendHttpRouter(
 			[]string{http.MethodPost, http.MethodGet},
-			"/v1/ws",
+			"/ws",
 			v.handleWebSocket,
 			"处理websocket的handle",
 			logReqAndResp(), VerifyJwt()),
 		AppendHttpRouter(
 			[]string{http.MethodGet},
-			"/v1/checkalive",
+			"/checkalive",
 			v.handleCheckAlive,
 			"程序健康检查",
 			logReqAndResp(), VerifyJwt()),
 		AppendHttpRouter(
 			[]string{http.MethodGet, http.MethodPost},
-			"/v1/cmd",
+			"/cmd",
 			v.handleCmd,
 			"cmd接口，使用统一的结构",
 			logReqAndResp(), VerifyJwt(),
