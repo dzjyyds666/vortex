@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/dzjyyds666/Allspark-go/conv"
 	"github.com/dzjyyds666/Allspark-go/logx"
@@ -47,7 +48,7 @@ func BootStrap(ctx context.Context, options ...Option) *Vortex {
 
 	v.routers = prepareRouters(v)
 	// 设置默认的18n
-	WithI18n(locale.V)
+	WithI18n(locale.V)(v)
 	for _, opt := range options {
 		opt(v)
 	}
@@ -172,14 +173,15 @@ func WithConsoleSecretKey(key string) Option {
 
 // 根据语言类型获取对应Em
 func getEmByLang(i18nkey, lang string) string {
-
 	//拼接对应key
-	if len(lang) <= 0 || len(i18nkey) <= 0 {
-		return ""
+	if len(lang) <= 0 {
+		lang = "zh-CN"
 	}
 	if emMap == nil {
 		return ""
 	}
 	key := i18nkey + "." + lang
+	key = strings.ToLower(key)
+	logx.Infof("getEmByLang|key:%s", key)
 	return emMap[key]
 }

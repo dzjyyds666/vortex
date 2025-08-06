@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dzjyyds666/Allspark-go/conv"
 	"github.com/dzjyyds666/Allspark-go/logx"
 	"github.com/dzjyyds666/Allspark-go/protocol"
 	"github.com/labstack/echo/v4"
@@ -40,7 +41,9 @@ func AppendHttpRouter(methods []string, path string, handle VortexHttpHandle, de
 func HttpJsonResponse(c echo.Context, status Status, data interface{}) error {
 	// 获取当前请求想要返回的语言类型
 	lang := c.Request().Header.Get(HttpHeaderEnum.AcceptLanguage.String())
-	em := getEmByLang(lang, status.I18nKey)
+	em := getEmByLang(status.I18nKey, lang)
+
+	logx.Infof("HttpJsonResponse|status:%s", conv.ToJsonWithoutError(status))
 
 	//构造数据
 	resp := &protocol.VortexPb{

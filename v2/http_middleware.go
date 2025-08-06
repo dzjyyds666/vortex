@@ -37,14 +37,6 @@ func (s *Session) Bind(claims jwt.MapClaims) *Session {
 
 type VortexHttpMiddleware echo.MiddlewareFunc
 
-// min returns the smaller of two integers
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 // 打印请求和响应的日志
 func logReqAndResp() VortexHttpMiddleware {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
